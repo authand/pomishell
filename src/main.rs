@@ -1,5 +1,7 @@
 use std::fs;
 
+const COMMANDS: [&str; 3] = ["cd", "ls", "exit"];
+
 fn get_input() -> String {
     let mut line: String = String::new();
     std::io::stdin().read_line(&mut line).unwrap();
@@ -33,7 +35,7 @@ fn parse_args(line: &str) -> Result<Vec<String>, String> {
     }
 
     if in_quotes {
-        Err("error in input".to_string())
+        Err("[-] error in input".to_string())
     } else {
         Ok(args)
     }
@@ -41,20 +43,21 @@ fn parse_args(line: &str) -> Result<Vec<String>, String> {
 
 fn cd_command(args: &[String]) -> bool {
     if args.len() < 2 {
-        eprintln!("expected arguement to 'cd'");
+        eprintln!("[-] expected argument to 'cd'");
         return true;
     }
 
     match std::env::set_current_dir(&args[1]) {
         Ok(_) => true,
         Err(e) => {
-            eprintln!("error: {e}");
+            eprintln!("[-] error: {e}");
             true
         }
     }
 }
 
 fn ls_command(args: &[String]) -> bool {
+    println!();
     let path = if args.len() > 1 {
         args[1].as_str()
     } else {
@@ -73,11 +76,25 @@ fn ls_command(args: &[String]) -> bool {
             println!();
         }
         Err(e) => {
-            eprintln!("ls: {}", e);
+            eprintln!("[-] ls: {}", e);
         }
     }
 
     true
+}
+
+
+fn run_external_command(args: &[String]) {
+    if let Some((cmd, rest)) = args.split_first() {
+        match std::process::Command::new(cmd).args(rest).status() {
+            Ok(status) => {
+                if !status.success() {
+                    eprintln!("[-] process exited with status: {}", status)
+                }
+            }
+            Err(e) => eprintln!("[-] failed to execute '{}': {}", cmd, e),
+        }
+    }
 }
 
 fn cat_command() {
@@ -87,14 +104,14 @@ fn cat_command() {
 fn main() {
     loop {
         let path = std::env::current_dir().unwrap();
-        print!("pomi:{}> ", path.display());
+        print!("POMI {}> ", path.display());
         std::io::Write::flush(&mut std::io::stdout()).unwrap();
 
         let line = get_input();
         let args = match parse_args(&line) {
             Ok(v) => v,
             Err(e) =>  {
-                eprintln!("parse error: {}", e);
+                eprintln!("[-] parse error: {}", e);
                 continue;
             }
         };
@@ -103,6 +120,11 @@ fn main() {
         }
 
         match args[0].as_str() {
+            "help" => {
+                for command in COMMANDS.iter() {
+                    println!("{}", command);
+                }
+            }
             "cd" => {
                 cd_command(&args);
             }
@@ -113,7 +135,7 @@ fn main() {
                 break;
             }
             _ => {
-                eprintln!("unknown command: {}", args[0])
+                run_external_command(&args);
             }
 
         }
