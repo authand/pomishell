@@ -34,7 +34,3 @@ Or, after building:
 ```
 
 Type commands and press enter. Use `exit` to quit.
-
-## License
-
-MIT License.
