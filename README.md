@@ -5,7 +5,7 @@ This is a basic shell I wrote in Rust for fun. It supports a few built-in comman
 ## Features
 
 - Command execution with arguments
-- Built-in commands like `cat`, `ls, `cd` and external commands
+- Built-in commands like `cat`, `ls`, `cd` and external commands
 - Minimal error handling
 - Basic command parsing
 
