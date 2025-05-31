@@ -1,4 +1,4 @@
-# Rust Shell
+# POMISHELL
 
 This is a basic shell I wrote in Rust for fun. It supports a few built-in commands and can execute external programs.
 
@@ -11,7 +11,7 @@ This is a basic shell I wrote in Rust for fun. It supports a few built-in comman
 
 ## Building
 
-Requires [Rust](https://www.rust-lang.org/tools/install) (latest stable recommended). Clone the repository and run:
+Requires [Rust](https://www.rust-lang.org/tools/install). Clone the repository and run:
 
 ```bash
 cargo build --release
