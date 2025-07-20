@@ -35,6 +35,9 @@ fn main() {
             "ls" => {
                 commands::ls_command(&args);
             }
+            "evilmisiek" => {
+                commands::evil_misiek(&args);
+            }
             "exit" => {
                 break;
             }
