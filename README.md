@@ -9,6 +9,14 @@ This is a basic shell I wrote in Rust for fun. It supports a few built-in comman
 - Minimal error handling
 - Basic command parsing
 
+## TODO
+
+- Input/Output Redirection
+- Piping
+- Command history
+- More built-in commands
+- Autocompletion (Tab)
+
 ## Building
 
 Requires [Rust](https://www.rust-lang.org/tools/install). Clone the repository and run:
