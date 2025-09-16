@@ -36,7 +36,7 @@ pub fn ls_command(args: &[String]) -> bool {
                             Ok(size) => size,
                             Err(e) => e.to_string()
                         }; 
-                        println!("{}\t{}", size, file_name);
+                        println!("{:>10}\t{}", size, file_name);
                     }
                 }
             }
