@@ -1,6 +1,6 @@
 # POMISHELL
 
-This is a basic shell I wrote in Rust for fun. It supports a few built-in commands and can execute external programs.
+This is a basic shell I wrote in Rust as a learning experience. It supports a few built-in commands and can execute external programs.
 
 ## Features
 
