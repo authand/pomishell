@@ -1,3 +1,5 @@
+use std::{fs::{self, DirEntry}, io};
+
 pub fn get_input() -> String {
     let mut line: String = String::new();
     std::io::stdin().read_line(&mut line).unwrap();
@@ -34,5 +36,16 @@ pub fn parse_args(line: &str) -> Result<Vec<String>, String> {
         Err("[-] error in input".to_string())
     } else {
         Ok(args)
+    }
+}
+
+pub fn file_size(entry: DirEntry) -> io::Result<String> {
+    let metadata = fs::metadata(entry.path())?;
+    // println!("{metadata:?}");
+
+    if metadata.is_dir() {
+        Ok(String::new())
+    } else {
+        Ok(metadata.len().to_string())
     }
 }

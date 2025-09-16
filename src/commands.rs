@@ -1,3 +1,4 @@
+use pomishell::file_size;
 use std::fs;
 
 pub const COMMANDS: [&str; 4] = ["cat", "cd", "ls", "exit"];
@@ -11,12 +12,35 @@ pub fn ls_command(args: &[String]) -> bool {
         "."
     };
 
+    match fs::canonicalize(path) {
+        Ok(full_path) => {
+            let display_path = full_path
+                .to_str()
+                .map(|s| s.strip_prefix(r"\\?\").unwrap_or(s))
+                .unwrap_or_default();
+
+            println!("Directory: {}\n", display_path);
+        }
+        Err(e) => {
+            eprintln!("Couldn't get directory: {}", e);
+            return true;
+        }
+    }
+
     match fs::read_dir(path) {
         Ok(entries) => {
             for entry in entries {
                 if let Ok(entry) = entry {
                     if let Ok(file_name) = entry.file_name().into_string() {
-                        println!("{}", file_name);
+                        let size: String = match file_size(entry) {
+                            Ok(size) => {
+                                size
+                            }
+                            Err(e) => {
+                                e.to_string()
+                            }
+                        }; 
+                        println!("{}\t{}", size, file_name);
                     }
                 }
             }
