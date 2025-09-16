@@ -3,6 +3,9 @@ use std::fs;
 
 pub const COMMANDS: [&str; 4] = ["cat", "cd", "ls", "exit"];
 
+static DIR_COLOR: &str = "\x1b[38;5;131m";
+static SIZE_COLOR: &str = "\x1b[38;5;166m";
+static RESET: &str = "\x1b[0m";
 
 pub fn ls_command(args: &[String]) -> bool {
     println!();
@@ -19,7 +22,7 @@ pub fn ls_command(args: &[String]) -> bool {
                 .map(|s| s.strip_prefix(r"\\?\").unwrap_or(s))
                 .unwrap_or_default();
 
-            println!("Directory: {}\n", display_path);
+            println!("{}Directory{}: {}\n", DIR_COLOR, RESET, display_path);
         }
         Err(e) => {
             eprintln!("Couldn't get directory: {}", e);
@@ -28,24 +31,29 @@ pub fn ls_command(args: &[String]) -> bool {
     }
 
     match fs::read_dir(path) {
-        Ok(entries) => {
-            for entry in entries {
-                if let Ok(entry) = entry {
-                    if let Ok(file_name) = entry.file_name().into_string() {
-                        let size: String = match file_size(entry) {
-                            Ok(size) => size,
-                            Err(e) => e.to_string()
-                        }; 
-                        println!("{:>10}\t{}", size, file_name);
+    Ok(entries) => {
+        for entry in entries {
+            if let Ok(entry) = entry {
+                if let Ok(file_name) = entry.file_name().into_string() {
+                    let size: String = match file_size(entry) {
+                        Ok(size) => size,
+                        Err(e) => e.to_string(),
+                    };
+
+                    if size.is_empty() {
+                        println!("{:>10}\t{}{}/{}", "", DIR_COLOR, file_name, RESET);
+                    } else {
+                        println!("{}{:>10}{}\t{}", SIZE_COLOR, size, RESET, file_name);
                     }
                 }
             }
-            println!();
         }
-        Err(e) => {
-            eprintln!("[-] ls: {}", e);
-        }
+        println!();
     }
+    Err(e) => {
+        eprintln!("[-] ls: {}", e);
+    }
+}
 
     true
 }
