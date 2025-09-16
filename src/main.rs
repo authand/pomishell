@@ -20,28 +20,33 @@ fn main() {
             continue;
         }
 
-        match args[0].as_str() {
+        let command_result = match args[0].as_str() {
             "help" => {
                 for command in commands::COMMANDS.iter() {
                     println!("{}", command);
                 }
+                Ok(())
             }
             "cat" => {
-                commands::cat_command(&args);
+                commands::cat_command(&args)
             }
             "cd" => {
-                commands::cd_command(&args);
+                commands::cd_command(&args)
             }
             "ls" => {
-                commands::ls_command(&args);
+                commands::ls_command(&args)
             }
             "exit" => {
                 break;
             }
             _ => {
                 commands::run_external_command(&args);
+                Ok(())
             }
+        };
 
+        if let Err(e) = command_result {
+            eprintln!("{}", e);
         }
     }
 }
