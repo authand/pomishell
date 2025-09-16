@@ -33,12 +33,8 @@ pub fn ls_command(args: &[String]) -> bool {
                 if let Ok(entry) = entry {
                     if let Ok(file_name) = entry.file_name().into_string() {
                         let size: String = match file_size(entry) {
-                            Ok(size) => {
-                                size
-                            }
-                            Err(e) => {
-                                e.to_string()
-                            }
+                            Ok(size) => size,
+                            Err(e) => e.to_string()
                         }; 
                         println!("{}\t{}", size, file_name);
                     }
