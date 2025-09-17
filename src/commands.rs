@@ -15,6 +15,7 @@ pub fn ls_command(args: &[String]) -> Result<(), String> {
         "."
     };
 
+    // patch windows file path having some weird artifact thing
     match fs::canonicalize(path) {
         Ok(full_path) => {
             let display_path = full_path
