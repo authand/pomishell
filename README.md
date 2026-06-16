@@ -10,11 +10,11 @@ This is a basic shell I wrote in Rust as a learning experience. It supports a fe
 - Piping with `|`
 - Minimal error handling
 - Basic command parsing
-- Std-only command history with `history`
+- Command history with `history`
 
 ## Note
 
-Tab autocompletion is not included so this can stay std-only.
+`rm` command is not yet implemented
 
 ## Building
 
